@@ -13,13 +13,6 @@ class LikeController extends Controller
 
         auth()->user()->like($question);
 
-        Vote::query()->create([
-            'question_id' => $question->id,
-            'user_id'     => auth()->id(),
-            'like'        => 1,
-            'unlike'      => 0,
-        ]);
-
         return back();
     }
 }
