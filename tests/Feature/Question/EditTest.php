@@ -6,7 +6,7 @@ use function Pest\Laravel\{actingAs, get};
 
 it('should be able to open a quetion to edit', function () {
     $user     = User::factory()->create();
-    $question = Question::factory()->for($user, 'createdBy')->create();
+    $question = Question::factory()->for($user, 'createdBy')->create(['draft' => true]);
 
     actingAs($user);
 
@@ -15,9 +15,21 @@ it('should be able to open a quetion to edit', function () {
 
 it('should return view', function () {
     $user     = User::factory()->create();
-    $question = Question::factory()->for($user, 'createdBy')->create();
+    $question = Question::factory()->for($user, 'createdBy')->create(['draft' => true]);
 
     actingAs($user);
 
     get(route('question.edit', $question))->assertViewIs('question.edit');
+});
+
+it('should make sure that only question with status DRAFT can be edited', function () {
+    $user             = User::factory()->create();
+    $questionNotDraft = Question::factory()->for($user, 'createdBy')->create(['draft' => false]);
+
+    $draftQuestion = Question::factory()->for($user, 'createdBy')->create(['draft' => true]);
+
+    actingAs($user);
+
+    get(route('question.edit', $questionNotDraft))->assertForbidden();
+    get(route('question.edit', $draftQuestion))->assertSuccessful();
 });
