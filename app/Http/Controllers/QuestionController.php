@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Rules\SameQuestionRule;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\{RedirectResponse, Request};
@@ -29,6 +30,7 @@ class QuestionController extends Controller
                         $fail("Are you sure that is a question? It is missing the question mark in the end.");
                     }
                 },
+                new SameQuestionRule(),
             ],
         ]);
 
