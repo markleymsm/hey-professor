@@ -13,6 +13,6 @@
         </div>
 
         
-        {{$questions->links()}}
+        {{$questions->whitQueryString()->links()}}
     </x-container>
 </x-app-layout>
